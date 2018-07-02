@@ -5,15 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>GunFight</title>
     <script type="text/javascript" src="./lib/enchant/enchant.js"></script>
+    <script type="text/javascript" src="./js/Vector2/Vector2.js"></script>
+    <script type="text/javascript" src="./js/Player/Player.js"></script>
     <script type="text/javascript" src="./js/main.js"></script>
     <script src="/socket.io/socket.io.js"></script>
   </head>
   <body>
     <script>
       let socket = io();
-      
+
       socket.emit('join', {name:"a"});
-      
+
   </script>
   </body>
 </html>
