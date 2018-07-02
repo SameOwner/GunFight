@@ -4,6 +4,9 @@ window.onload = function() {
 
 
     var core = new Core(320, 320); //表示される領域を設定
+    //全部の弾情報
+    var bullets=[];
+
     core.fps = 64; // フレーム数を設定
     core.preload('./img/chara1.png'); //リソース読み込み
 
@@ -20,6 +23,10 @@ window.onload = function() {
         core.rootScene.addChild(player.getSprite()); // 現在のシーンに熊を追加
         core.rootScene.backgroundColor  = '#7ecef4'; //背景色変更
 
+        //プレイヤーが弾を撃つ
+        core.rootScene.addEventListener("touchmove", function(e) {
+          player.attack(new Vector2(e.x,e.y));
+        });
         //Update
         core.rootScene.addEventListener(Event.ENTER_FRAME, function(e)
         {

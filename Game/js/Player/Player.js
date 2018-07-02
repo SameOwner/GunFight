@@ -4,6 +4,7 @@ var Player=function(core,vector2){
   this.sprite.image=core.assets['./img/chara1.png'];
   this.vector2=vector2;
   this.core=core;
+  this.bullets=[];
 }
 Player.prototype={
   getSprite : function(){
@@ -30,5 +31,16 @@ Player.prototype={
     }
     this.sprite.x=this.vector2.x;
     this.sprite.y=this.vector2.y;
+
+    //弾たちのアップデート
+    for(var i=0;i<this.bullets.length;i++){
+      this.bullets[i].upDate();
+    }
+  },
+  attack :function(attackVec2){
+    attackVec2.minus(this.vector2);
+    var bullet=new Bullet(this.core,new Vector2(this.vector2.x,this.vector2.y),new Vector2(attackVec2.x,attackVec2.y));
+    this.core.rootScene.addChild(bullet.getSprite());
+    this.bullets.push(bullet);
   }
 }

@@ -22,7 +22,7 @@ Vector2.prototype={
     this.x*=vector2.x;
     this.y*=vector2.y;
   },
-  div:function(vector2){
+  divVec:function(vector2){
     this.x/=vector2.x;
     this.y/=vector2.y;
   },
@@ -32,5 +32,8 @@ Vector2.prototype={
     vecX=Math.pow(vecX,2);
     vecY=Math.pow(vecY,2);
     return Math.sqrt(vecX+vecY);
+  },
+  nomalize:function(){
+
   }
 }
