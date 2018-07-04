@@ -33,7 +33,20 @@ Vector2.prototype={
     vecY=Math.pow(vecY,2);
     return Math.sqrt(vecX+vecY);
   },
-  nomalize:function(){
+  normalize:function(){
+    var sq=Math.sqrt(Math.pow(this.x,2)+Math.pow(this.y,2));
+    return new Vector2(this.x/sq,this.y/sq);
+  },
+  length:function(){
+    return Math.sqrt(Math.pow(this.x,2)+Math.pow(this.y,2));
+  },
+  dot:function(vector2){
+    return this.x*vector2.x+this.y*vector2.y;
+  },
+  //なす角
+  Angle:function(){
 
+  var angle=Math.atan2(this.y,this.x);
+    return angle*180.0/Math.PI+180;
   }
 }
