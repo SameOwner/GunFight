@@ -23,15 +23,27 @@ io.on('connection', (socket)=>{
 
 	//部屋に入る
 	socket.on('join', function(name) {
-		let num=room_num;
+		let num=room_num;//今回のルーム番号
+		let isStart=false;//ゲーム開始チェック
+		//現在の番号のルームが存在しているかを確認
         if(io.sockets.adapter.rooms[num.toString()]){
+			//ルームに既に人がいたら、ゲーム開始フラグを立てて、次の部屋をセット
 			if(io.sockets.adapter.rooms[num.toString()].length==1)room_num++;
+			isStart=true;
 		}
+		//入室
 		socket.join(num.toString());
 		console.log(`[${name}]さんが[${num}]ルームに入室しました`)
 		console.log(io.sockets.adapter.rooms);
+		if(isStart){
+			//ゲーム開始、ルーム番号を渡す
+			io.to(num.toString()).emit('gamestart',num.toString());
+		}
 	});
-
+	socket.on('update',(data)=>{
+		//更新情報の受け渡し
+		io.to(data.room).emit('update', data);
+	});
 	//チャットメッセージ
 	socket.on('chat message', (msg)=>{
 		io.to(msg.room).emit('chat message', msg);
