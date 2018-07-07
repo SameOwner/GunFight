@@ -1,9 +1,12 @@
 
 const port = 3000;
-const app  = require('express')();
+const express  = require('express');
+const app  = express();
 const http = require('http').Server(app);
 const io   = require('socket.io')(http);
 let room_num = 0;
+
+app.use('/', express.static(__dirname));
 
 app.get('/', (req, res)=>{
 	res.sendFile(__dirname + '/index.html');
@@ -33,12 +36,13 @@ io.on('connection', (socket)=>{
 		}
 		//入室
 		socket.join(num.toString());
-		console.log(`[${name}]さんが[${num}]ルームに入室しました`)
+		console.log(`[${name.name}]さんが[${num}]ルームに入室しました`)
 		console.log(io.sockets.adapter.rooms);
 		if(isStart){
 			//ゲーム開始、ルーム番号を渡す
 			io.to(num.toString()).emit('gamestart',num.toString());
 		}
+		
 	});
 	socket.on('update',(data)=>{
 		//更新情報の受け渡し
@@ -50,9 +54,13 @@ io.on('connection', (socket)=>{
 		console.log('message: ' + JSON.stringify(msg));
 	});
 
+	socket.on('page close',(data)=>{
+		io.to(data.room).emit('close room');
+
+	});
 	//切断
-	socket.on('disconnect', (msg)=>{
-		console.log('user disconnected');
+	socket.on('disconnect', ()=>{
+		console.log("disconnected");
 	});
 });
 
