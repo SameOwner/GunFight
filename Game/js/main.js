@@ -9,6 +9,8 @@ window.onload = function() {
     //リソース読み込み
     core.preload('./img/player2.png');
     core.preload('./img/bullet.png');
+    core.preload('./img/matching_wait.png');
+
     //キーバインド
     core.keybind(87, "w");
     core.keybind(65, "a");
@@ -16,11 +18,24 @@ window.onload = function() {
     core.keybind(68, "d");
     core.onload = function() { //メイン処理
       //シーン読み込み
+      var sceneMatching=matchingScene(core);
       var sceneGamePlay=gamePlayScene(core);
 
       //ゲームプレイシーンへ;
-        core.replaceScene(sceneGamePlay);
+        core.replaceScene(sceneMatching);
         core.currentScene.backgroundColor  = '#7ecef4'; //背景色変更
+
+        socket.emit('join', {name:name});
+
+        socket.on('gamestart',()=>{
+            alert("ゲームを開始します");
+            core.replaceScene(sceneGamePlay);
+
+        });
     }
     core.start();
+
+
+
+
 };
