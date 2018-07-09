@@ -38,9 +38,10 @@ io.on('connection', (socket)=>{
 		socket.join(num.toString());
 		console.log(`[${name.name}]さんが[${num}]ルームに入室しました`)
 		console.log(io.sockets.adapter.rooms);
+		io.to(socket.id).emit('setroom',num.toString());
 		if(isStart){
 			//ゲーム開始、ルーム番号を渡す
-			io.to(num.toString()).emit('gamestart',num.toString());
+			io.to(num.toString()).emit('gamestart');
 		}
 		
 	});
@@ -56,6 +57,7 @@ io.on('connection', (socket)=>{
 
 	socket.on('page close',(data)=>{
 		io.to(data.room).emit('close room');
+		console.log(`${data.room}ルームの${data.name}が退室しました`);
 
 	});
 	//切断

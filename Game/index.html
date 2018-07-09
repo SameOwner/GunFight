@@ -17,9 +17,12 @@
   <body>
     <script>
       let socket = io();
-
-      socket.emit('join', {name:"a"});
-
+      let room;
+      let name="a";
+      socket.emit('join', {name:name});
   </script>
+    <script type="text/javascript" src="./js/Event/RoomEvent.js"></script>
+    <script type="text/javascript" src="./js/Event/PageCloseEvent.js"></script>
+
   </body>
 </html>
