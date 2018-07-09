@@ -44,16 +44,17 @@ var frame=0;
     frame++;
     //貰う
     socket.on('update',(data)=>{
-      var enemyPos=new Vector2(data.pos[0],data.pos[1]);
-      if(frame%60==0)
-      console.log(data.pos[0]);
-      enemy.vector2.x=enemyPos.x;
-      enemy.vector2.y=enemyPos.y;
+      if(data.playerNum!=playerNum){
+        var enemyPos=new Vector2(data.pos[0],data.pos[1]);
+        console.log(data.pos[0]);
+        enemy.vector2.x=enemyPos.x;
+        enemy.vector2.y=enemyPos.y;  
+      }
     });
     //送る
     var playerPos=player.getPosition();
     var arrayPos=[playerPos.x,playerPos.y];
-    socket.emit('update',{room:room,pos:arrayPos});
+    socket.emit('update',{room:room,pos:arrayPos,playerNum:playerNum});
 
   });
 
