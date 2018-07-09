@@ -5,12 +5,17 @@ var gamePlayScene=function(core){
   var timeUi=new TimeUI(core);
   //弾マネージャー追加
   var bulletManager=new BulletManager(core);
+
+
+var frame=0;
+
   scene.addChild(timeUi.getLabel());
 
   //プレイヤー追加
+  var enemy=new Enemy(core,new Vector2(256,256));
   var player=new Player(core,new Vector2(128,128));
   scene.addChild(player.getSprite()); // 現在のシーンに熊を追加
-
+  scene.addChild(enemy.getSprite());
   //プレイヤーが弾を撃つイベント
   scene.addEventListener('touchstart', function(e) {
     //死んでるときは打てない
@@ -21,6 +26,7 @@ var gamePlayScene=function(core){
   scene.addEventListener(Event.ENTER_FRAME, function(e)
   {
     player.upDate();
+    enemy.upDate();
     bulletManager.upDate();
     timeUi.upDate();
     //あたり判定テスト
@@ -35,6 +41,20 @@ var gamePlayScene=function(core){
           player.Damage();
       }
     }
+    frame++;
+    //貰う
+    socket.on('update',(data)=>{
+      var enemyPos=new Vector2(data.pos[0],data.pos[1]);
+      if(frame%60==0)
+      console.log(data.pos[0]);
+      enemy.vector2.x=enemyPos.x;
+      enemy.vector2.y=enemyPos.y;
+    });
+    //送る
+    var playerPos=player.getPosition();
+    var arrayPos=[playerPos.x,playerPos.y];
+    socket.emit('update',{room:room,pos:arrayPos});
+
   });
 
   return scene;

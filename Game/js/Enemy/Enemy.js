@@ -8,8 +8,10 @@ var Enemy=function(core,vector2){
   this.time=0;
   this.direNum=0;
   this.sevePos=new Vector2(vector2.x,vector2.y);
+
+  this.sprite.scale(0.7,0.7);
 }
-Player.prototype={
+Enemy.prototype={
   getSprite : function(){
     return this.sprite;
   },
@@ -25,15 +27,16 @@ Player.prototype={
   //座標をセットする
   setPosition:function(pos){
     this.vector2=pos;
-  }
+  },
   upDate :function(){
     //移動してるか？
     var isMove=false;
 
-    var velo=this.vector2.minus(this.sevePos);
+    var velo=new Vector2(this.vector2.x,this.vector2.y);
+    velo.minus(this.sevePos);
     this.sevePos=new Vector2(this.vector2.x,this.vector2.y);
     //向きナンバー
-    if(velo.x>0&&velo.y<0)this.direNum=3*7
+    if(velo.x>0&&velo.y<0)this.direNum=3*7;
     else if(velo.x>0&&velo.y>0)this.direNum=3*3;
     else if(velo.x<0&&velo.y<0)this.direNum=3*5;
     else if(velo.x<0&&velo.y>0)this.direNum=3*1;
@@ -58,5 +61,8 @@ Player.prototype={
     this.frame=1;
     //フレーム設定
     this.sprite.frame=this.frame+this.direNum;
+
+    this.sprite.x=this.vector2.x;
+    this.sprite.y=this.vector2.y;
   }
 }
