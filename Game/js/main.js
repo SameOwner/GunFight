@@ -10,6 +10,7 @@ window.onload = function() {
     core.preload('./img/player2.png');
     core.preload('./img/bullet.png');
     core.preload('./img/matching_wait.png');
+    core.preload('./sound/matching_finish.mp3');
 
     //キーバインド
     core.keybind(87, "w");
@@ -29,6 +30,8 @@ window.onload = function() {
 
         socket.on('gamestart',()=>{
             alert("ゲームを開始します");
+            let sound = core.assets['./sound/matching_finish.mp3'].clone();
+            sound.play();
             core.replaceScene(sceneGamePlay);
 
         });
