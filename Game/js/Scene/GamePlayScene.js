@@ -6,10 +6,14 @@ var gamePlayScene=function(core){
   //弾マネージャー追加
   var bulletManager=new BulletManager(core);
   var frame=0;
+
+
   scene.addChild(timeUi.getLabel());
 
   var enemy=new Enemy(core,new Vector2(256,256));
   var player=new Player(core,new Vector2(128,128));
+
+  var rulue=new GameRule(timeUi,player,enemy);
   scene.addChild(player.getSprite()); //　プレイヤー追加
   scene.addChild(enemy.getSprite());  //エネミー追加
   //プレイヤーが弾を撃つイベント
@@ -39,6 +43,17 @@ var gamePlayScene=function(core){
     enemy.upDate();
     bulletManager.upDate();
     timeUi.upDate();
+
+
+    rulue.upDate();
+
+
+    if(rulue.getIsEnd()){
+      var sceneResult=resultScene(core,rulue);
+      core.replaceScene(sceneResult);
+      return;
+    }
+
     //あたり判定テスト
     for(var i=0;i<bulletManager.getBullets().length;i++){
       //当たっているかどうか
@@ -55,8 +70,6 @@ var gamePlayScene=function(core){
           //配列からも
           bulletManager.getBullets().splice(i,1);
       }
-
-
     }
     //ネット系
     frame++;

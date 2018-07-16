@@ -12,11 +12,11 @@ var GameRule=function(timer,player,enemy){
 GameRule.prototype={
   upDate:function(){
     if(!this.isEnd){
-      if(player.getHp()<=0){
+      if(this.player.getHp()<=0){
         this.isEnemyWin=true;
         this.isEnd=true;
       }
-      else if(enemy.getIsDead()){
+      else if(this.enemy.getIsDead()){
         this.isPlayerWin=true;
         this.isEnd=true;
       }
@@ -25,5 +25,17 @@ GameRule.prototype={
         this.isEnd=true;
       }
     }
+  },
+  getIsEnd(){
+    return this.isEnd;
+  },
+  getIsWinEnemy(){
+    return this.isEnemyWin;
+  },
+  getIsTimeUp(){
+    return this.isTimeUp;
+  },
+  getIsWinPlayer(){
+    return this.isPlayerWin;
   }
 }
