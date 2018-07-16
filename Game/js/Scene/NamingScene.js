@@ -1,4 +1,4 @@
-var namingScene=function(core){
+var namingScene=function(core,matching){
     var scene=new Scene();
     let _core=core;
 
@@ -17,18 +17,19 @@ var namingScene=function(core){
 
 	//rootSceneに追加
     scene.addChild(input);
-        
-    let decisionButton=new ButtonUI(core,'./img/decide_button.png',64,32,0,0,1,1);
+
+    let decisionButton=new ButtonUI(core,'./img/decide_button.png',64,32,120,50,1,1);
     decisionButton.setEvent(function(){
         name=input._element.value;
+        socket.emit('join', {name:name});
 
+        core.replaceScene(matching);
     });
     scene.addChild(decisionButton.getSprite());
     //Update
     scene.addEventListener(Event.ENTER_FRAME, function(e){
         console.log(name);
     });
-  
+
     return scene;
   }
-  
