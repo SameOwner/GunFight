@@ -15,7 +15,7 @@ window.onload = function() {
     core.preload('./img/decide_button.png');
     core.preload('./img/gunfight.png');
     core.preload('./img/start_button.png');
-
+    core.preload('./img/Heart.jpg');
     //キーバインド
     core.keybind(87, "w");
     core.keybind(65, "a");
