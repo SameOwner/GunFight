@@ -9,21 +9,21 @@ window.onload = function() {
     //リソース読み込み
     core.preload('./img/player2.png');
     core.preload('./img/bullet.png');
+    core.preload('./img/block.png');
     core.preload('./img/enemyBullet.png');
     core.preload('./img/matching_wait.png');
     core.preload('./img/decide_button.png');
     core.preload('./img/gunfight.png');
     core.preload('./img/start_button.png');
     core.preload('./img/returntitle_button.png');
-
-
     core.preload('./sound/matching_finish.mp3');
     core.preload('./sound/title.mp3');
     core.preload('./sound/bgm_gameplay.mp3');
     core.preload('./sound/result.mp3');
     core.preload('./sound/game_start.mp3');
     core.preload('./sound/game_finish.mp3');
-
+    core.preload('./img/Heart.png');
+    core.preload('./img/background.png');
     //キーバインド
     core.keybind(87, "w");
     core.keybind(65, "a");

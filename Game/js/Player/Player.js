@@ -9,7 +9,7 @@ var Player=function(core,vector2){
   this.bullets=[];
   this.time=0;
   this.direNum=0;
-  this.Hp=5;
+  this.Hp=3;
 }
 Player.prototype={
   getSprite : function(){
@@ -55,13 +55,6 @@ Player.prototype={
       isMove=true;
     }
     this.vector2.plus(velo);
-
-    //クランプ
-    if(this.vector2.x<=-15)this.vector2.x=-15;
-    if(this.vector2.x>=this.core.width-30)this.vector2.x=this.core.width-30;
-    if(this.vector2.y>=this.core.height-40)this.vector2.y=this.core.height-40;
-    if(this.vector2.y<=-25)this.vector2.y=-25;
-
     //向きを代入
     this.sprite.x=this.vector2.x;
     this.sprite.y=this.vector2.y;

@@ -1,21 +1,35 @@
 var gamePlayScene=function(core,title,bgmManager){
   var scene=new Scene();
-
   //時間UI追加
   var timeUi=new TimeUI(core);
   //弾マネージャー追加
   var bulletManager=new BulletManager(core);
   var frame=0;
 
+  var backGraund=new Sprite(320,320);
+  backGraund.image=core.assets['./img/background.png'];
+  backGraund.x=0;
+  backGraund.y=0;
 
+  scene.addChild(backGraund);
   scene.addChild(timeUi.getLabel());
-
   var enemy=new Enemy(core,new Vector2(256,256));
   var player=new Player(core,new Vector2(128,128));
-
   var rulue=new GameRule(timeUi,player,enemy);
+
+
+
+  var blockManager = new BlockManager(scene);
+  blockManager.AddBlock(new Block(core, new Vector2(0, 0), 5, 320));
+  blockManager.AddBlock(new Block(core, new Vector2(315, 0), 5, 320));
+  blockManager.AddBlock(new Block(core, new Vector2(0, 0), 320, 5));
+  blockManager.AddBlock(new Block(core, new Vector2(0, 315), 320, 5));
+  blockManager.AddBlock(new Block(core, new Vector2(50, 50), 50, 50));
+
   scene.addChild(player.getSprite()); //　プレイヤー追加
   scene.addChild(enemy.getSprite());  //エネミー追加
+  var heart=new Heart(core,scene,player);
+
   //プレイヤーが弾を撃つイベント
   scene.addEventListener('touchstart', function(e) {
     //死んでるときは打てない
@@ -30,10 +44,13 @@ var gamePlayScene=function(core,title,bgmManager){
         enemy.vector2.x=enemyPos.x;
         enemy.vector2.y=enemyPos.y;
         bulletManager.addEnemyBullet(data.bullets);
+        heart.setEnemyHp(data.hp);
         if(data.hp<=0){
           enemy.isDeadFunction();
         };
       }
+
+
     });
 
   //Update
@@ -43,10 +60,12 @@ var gamePlayScene=function(core,title,bgmManager){
     enemy.upDate();
     bulletManager.upDate();
     timeUi.upDate();
-
-
     rulue.upDate();
+    heart.upDate();
 
+
+    let offset = new Vector2(player.getSprite().width / 2, player.getSprite().height / 2);
+    player.setPosition(blockManager.Intersect(player.getPosition(), offset, offset.x * player.getSprite().scaleX));
 
     if(rulue.getIsEnd()){
       socket.emit('game end', {room:room});
@@ -72,6 +91,13 @@ var gamePlayScene=function(core,title,bgmManager){
           scene.removeChild(bulletManager.getBullets()[i].getSprite());
           //配列からも
           bulletManager.getBullets().splice(i,1);
+      } else {
+          var bullet = bulletManager.getBullets()[i];
+          let offset = new Vector2(bullet.getSprite().width / 2, bullet.getSprite().height / 2);
+          if (blockManager.IsCollision(bullet.getPosition(), offset, offset.x * bullet.getSprite().scaleX)) {
+              scene.removeChild(bullet.getSprite());
+              bulletManager.getBullets().splice(i, 1);
+          }
       }
     }
     //ネット系
