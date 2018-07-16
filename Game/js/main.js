@@ -9,6 +9,7 @@ window.onload = function() {
     //リソース読み込み
     core.preload('./img/player2.png');
     core.preload('./img/bullet.png');
+    core.preload('./img/enemyBullet.png');
     //キーバインド
     core.keybind(87, "w");
     core.keybind(65, "a");
@@ -17,7 +18,7 @@ window.onload = function() {
     core.onload = function() { //メイン処理
       //シーン読み込み
       var sceneGamePlay=gamePlayScene(core);
-
+      var i=new Vector2(0,0);
       //ゲームプレイシーンへ;
         core.replaceScene(sceneGamePlay);
         core.currentScene.backgroundColor  = '#7ecef4'; //背景色変更

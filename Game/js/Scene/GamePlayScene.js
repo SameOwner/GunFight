@@ -5,23 +5,33 @@ var gamePlayScene=function(core){
   var timeUi=new TimeUI(core);
   //弾マネージャー追加
   var bulletManager=new BulletManager(core);
-
-
-var frame=0;
-
+  var frame=0;
   scene.addChild(timeUi.getLabel());
 
-  //プレイヤー追加
   var enemy=new Enemy(core,new Vector2(256,256));
   var player=new Player(core,new Vector2(128,128));
-  scene.addChild(player.getSprite()); // 現在のシーンに熊を追加
-  scene.addChild(enemy.getSprite());
+  scene.addChild(player.getSprite()); //　プレイヤー追加
+  scene.addChild(enemy.getSprite());  //エネミー追加
   //プレイヤーが弾を撃つイベント
   scene.addEventListener('touchstart', function(e) {
     //死んでるときは打てない
-    if(player.getHp()>0)
-    bulletManager.addBullet(player.SpawnBullet(new Vector2(e.x,e.y)));
+    if(player.getHp()>0){
+      bulletManager.addBullet(player.SpawnBullet(bulletManager,new Vector2(e.x,e.y)));
+    }
   });
+    //ネット貰う
+    socket.on('update',(data)=>{
+      if(data.playerNum!=playerNum){
+        var enemyPos=new Vector2(data.pos[0],data.pos[1]);
+        enemy.vector2.x=enemyPos.x;
+        enemy.vector2.y=enemyPos.y;
+        bulletManager.addEnemyBullet(data.bullets);
+        if(data.hp<=0){
+          enemy.isDeadFunction();
+        };
+      }
+    });
+
   //Update
   scene.addEventListener(Event.ENTER_FRAME, function(e)
   {
@@ -40,22 +50,25 @@ var frame=0;
           //ダメージ
           player.Damage();
       }
-    }
-    frame++;
-    //貰う
-    socket.on('update',(data)=>{
-      if(data.playerNum!=playerNum){
-        var enemyPos=new Vector2(data.pos[0],data.pos[1]);
-        console.log(data.pos[0]);
-        enemy.vector2.x=enemyPos.x;
-        enemy.vector2.y=enemyPos.y;  
+      else if(bulletManager.getBullets()[i].getSprite().within(enemy.getSprite(),16)) {
+          scene.removeChild(bulletManager.getBullets()[i].getSprite());
+          //配列からも
+          bulletManager.getBullets().splice(i,1);
       }
-    });
-    //送る
-    var playerPos=player.getPosition();
-    var arrayPos=[playerPos.x,playerPos.y];
-    socket.emit('update',{room:room,pos:arrayPos,playerNum:playerNum});
 
+
+    }
+    //ネット系
+    frame++;
+    if(frame%1==0){
+      //送る
+      var playerPos=player.getPosition();
+      var arrayPos=[playerPos.x,playerPos.y];
+      var bullets=[0,0,0,0];  //座標x,座標y,動きベクトルx,動きベクトルy  撃ってない場合は全部0
+      bullets=bulletManager.getNetBullet().slice();
+      bulletManager.resetNetBullet();
+      socket.emit('update',{room:room,pos:arrayPos,playerNum:playerNum,bullets:bullets,hp:player.getHp()});
+    }
   });
 
   return scene;

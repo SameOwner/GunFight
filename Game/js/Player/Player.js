@@ -95,11 +95,13 @@ Player.prototype={
 
   },
   //攻撃する時に呼ぶ
-  SpawnBullet :function(attackVec2){
+  SpawnBullet :function(bulletManager,attackVec2){
     var playerPos=new Vector2(this.vector2.x,this.vector2.y);
     playerPos.plus(new Vector2(40/2/2,56/2/2));
     attackVec2.minus(playerPos);
     var normalizeVec=new Vector2(attackVec2.x,attackVec2.y).normalize();
-    return new Bullet(this.core,new Vector2(this.vector2.x+(40*0.2/2),this.vector2.y+(56*0.7/2)),normalizeVec);
+    var bulletSpawnPos=new Vector2(this.vector2.x+(40*0.2/2),this.vector2.y+(56*0.7/2));
+    bulletManager.setNetBullet(bulletSpawnPos,normalizeVec);
+    return new Bullet(this.core,bulletSpawnPos,normalizeVec);
   }
 }

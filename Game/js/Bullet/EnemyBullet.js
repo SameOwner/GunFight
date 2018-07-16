@@ -1,34 +1,30 @@
 //Player定義
-var Bullet=function(core,posVec2,attackVec2){
+var EnemyBullet=function(core,pos){
   this.sprite=new Sprite(33,24);
-  this.sprite.image=core.assets['./img/bullet.png'];
+  this.sprite.image=core.assets['./img/enemyBullet.png'];
   this.sprite.scale(0.7,0.7);
   var attackMult=new Vector2(attackVec2.x,attackVec2.y);
   attackMult.multi(new Vector2(25,25));
   posVec2.plus(attackMult);
-  this.vector2=posVec2;
+  this.vector2=pos;
   this.core=core;
-  this.attackVec2=attackVec2;
 
   this.sprite.x=this.vector2.x;
   this.sprite.y=this.vector2.y;
 
-
+  this.sevePos=new Vector2(this.vector2.x,this.vector2.y);
 }
-Bullet.prototype={
+EnemyBullet.prototype={
   getPosition :function(){
     return new Vector2(this.vector2.x,this.vector2.y);
   },
+  setPosition :function(pos){
+    this.vector2.x=pos.x;
+    this.vector2.y=pos.y;
+    this.sprite.x=pos.x;
+    this.sprite.y=pos.y;
+  }
   getSprite : function(){
     return this.sprite;
-  },
-  upDate :function(){
-    this.vector2.x+=this.attackVec2.x*2;
-    this.vector2.y+=this.attackVec2.y*2;
-    var angle=this.attackVec2.Angle();
-    this.sprite.rotation=angle;
-
-    this.sprite.x=this.vector2.x;
-    this.sprite.y=this.vector2.y;
   }
 }

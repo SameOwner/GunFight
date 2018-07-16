@@ -9,6 +9,8 @@ var Enemy=function(core,vector2){
   this.direNum=0;
   this.sevePos=new Vector2(vector2.x,vector2.y);
 
+  this.isDead=false;
+
   this.sprite.scale(0.7,0.7);
 }
 Enemy.prototype={
@@ -27,6 +29,13 @@ Enemy.prototype={
   //座標をセットする
   setPosition:function(pos){
     this.vector2=pos;
+  },
+  isDeadFunction:function(){
+    this.isDead=true;
+    this.sprite.opacity=0.0;
+  },
+  getIsDead:function(){
+    return this.isDead;
   },
   upDate :function(){
     //移動してるか？
