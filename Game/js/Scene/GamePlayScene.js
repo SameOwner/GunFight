@@ -1,4 +1,4 @@
-var gamePlayScene=function(core){
+var gamePlayScene=function(core,title,bgmManager){
   var scene=new Scene();
 
   //時間UI追加
@@ -49,7 +49,10 @@ var gamePlayScene=function(core){
 
 
     if(rulue.getIsEnd()){
-      var sceneResult=resultScene(core,rulue);
+      socket.emit('game end', {room:room});
+      bgmManager.play('./sound/result.mp3');
+      
+      var sceneResult=resultScene(core,rulue,title);
       core.replaceScene(sceneResult);
       return;
     }

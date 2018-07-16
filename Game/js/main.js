@@ -11,10 +11,18 @@ window.onload = function() {
     core.preload('./img/bullet.png');
     core.preload('./img/enemyBullet.png');
     core.preload('./img/matching_wait.png');
-    core.preload('./sound/matching_finish.mp3');
     core.preload('./img/decide_button.png');
     core.preload('./img/gunfight.png');
     core.preload('./img/start_button.png');
+    core.preload('./img/returntitle_button.png');
+
+
+    core.preload('./sound/matching_finish.mp3');
+    core.preload('./sound/title.mp3');
+    core.preload('./sound/bgm_gameplay.mp3');
+    core.preload('./sound/result.mp3');
+    core.preload('./sound/game_start.mp3');
+    core.preload('./sound/game_finish.mp3');
 
     //キーバインド
     core.keybind(87, "w");
@@ -22,21 +30,37 @@ window.onload = function() {
     core.keybind(83, "s");
     core.keybind(68, "d");
     core.onload = function() { //メイン処理
+
+      let bgmManager=new BGMManager(core);
+      bgmManager.play('./sound/title.mp3');
+
       //シーン読み込み
       var sceneMatching=matchingScene(core);
       var sceneNaming=namingScene(core,sceneMatching);
-      var sceneTitle=titleScene(core,sceneNaming);
-      var sceneGamePlay=gamePlayScene(core);
+      var sceneTitle=titleScene(core,sceneNaming,bgmManager);
+      var sceneGamePlay=gamePlayScene(core,sceneTitle,bgmManager);
       var i=new Vector2(0,0);
       //ゲームプレイシーンへ;
-        core.replaceScene(sceneTitle);
-        core.currentScene.backgroundColor  = '#7ecef4'; //背景色変更
+
+      core.replaceScene(sceneTitle);
+      core.currentScene.backgroundColor  = '#7ecef4'; //背景色変更
 
         socket.on('gamestart',()=>{
             alert("ゲームを開始します");
-            let sound = core.assets['./sound/matching_finish.mp3'].clone();
-            sound.play();
-            core.replaceScene(sceneGamePlay);
+            socket.emit('ready', {room:room});
+
+        });
+        socket.on('go',(num)=>{
+          maptype=num;
+          let sound = core.assets['./sound/matching_finish.mp3'].clone();
+          sound.play();
+          bgmManager.play('./sound/bgm_gameplay.mp3');
+          core.replaceScene(sceneGamePlay);
+
+        });
+        socket.on('close room',()=>{
+          alert("接続が切断されました");
+          location.reload();
 
         });
     }
