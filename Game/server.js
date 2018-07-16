@@ -1,5 +1,5 @@
 
-const port = 3000;
+const port = 3021;
 const express  = require('express');
 const app  = express();
 const http = require('http').Server(app);
@@ -28,21 +28,26 @@ io.on('connection', (socket)=>{
 	socket.on('join', function(name) {
 		let num=room_num;//今回のルーム番号
 		let isStart=false;//ゲーム開始チェック
+		let playerNum=1;//1pか2pか
 		//現在の番号のルームが存在しているかを確認
         if(io.sockets.adapter.rooms[num.toString()]){
 			//ルームに既に人がいたら、ゲーム開始フラグを立てて、次の部屋をセット
-			if(io.sockets.adapter.rooms[num.toString()].length==1)room_num++;
+			if(io.sockets.adapter.rooms[num.toString()].length==1){
+				room_num++;
+				playerNum=2;
+			}
 			isStart=true;
 		}
 		//入室
 		socket.join(num.toString());
-		console.log(`[${name.name}]さんが[${num}]ルームに入室しました`)
+		console.log(`[${name.name}]さんが[${num}]ルームに入室しました、${playerNum}P側です`)
 		console.log(io.sockets.adapter.rooms);
+		io.to(socket.id).emit('setroom',{room:num.toString(),playerNum:playerNum});
 		if(isStart){
 			//ゲーム開始、ルーム番号を渡す
-			io.to(num.toString()).emit('gamestart',num.toString());
+			io.to(num.toString()).emit('gamestart');
 		}
-		
+
 	});
 	socket.on('update',(data)=>{
 		//更新情報の受け渡し
@@ -56,6 +61,7 @@ io.on('connection', (socket)=>{
 
 	socket.on('page close',(data)=>{
 		io.to(data.room).emit('close room');
+		console.log(`${data.room}ルームの${data.name}が退室しました`);
 
 	});
 	//切断
@@ -63,5 +69,3 @@ io.on('connection', (socket)=>{
 		console.log("disconnected");
 	});
 });
-
-

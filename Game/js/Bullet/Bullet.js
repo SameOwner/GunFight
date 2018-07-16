@@ -19,7 +19,6 @@ Bullet.prototype={
   getPosition :function(){
     return new Vector2(this.vector2.x,this.vector2.y);
   },
-
   getSprite : function(){
     return this.sprite;
   },

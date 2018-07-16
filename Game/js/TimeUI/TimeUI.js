@@ -12,5 +12,8 @@ TimeUI.prototype={
   },
   getLabel :function(){
     return this.label;
+  },
+  getTime:function(){
+    return parseInt(this.time/60);
   }
 }
