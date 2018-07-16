@@ -9,6 +9,7 @@ window.onload = function() {
     //リソース読み込み
     core.preload('./img/player2.png');
     core.preload('./img/bullet.png');
+    core.preload('./img/block.png');
     core.preload('./img/enemyBullet.png');
     core.preload('./img/matching_wait.png');
     core.preload('./sound/matching_finish.mp3');
