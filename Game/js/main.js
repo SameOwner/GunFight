@@ -3,7 +3,7 @@ enchant();
 window.onload = function() {
 
 
-    var core = new Core(320, 320); //表示される領域を設定
+    var core = new Core(screen_width, screen_height); //表示される領域を設定
 
     core.fps = 64; // フレーム数を設定
     //リソース読み込み
@@ -14,7 +14,7 @@ window.onload = function() {
     core.preload('./sound/matching_finish.mp3');
     core.preload('./img/decide_button.png');
     core.preload('./img/gunfight.png');
-    core.preload('./img/Heart.jpg');
+    core.preload('./img/start_button.png');
 
     //キーバインド
     core.keybind(87, "w");
@@ -23,16 +23,14 @@ window.onload = function() {
     core.keybind(68, "d");
     core.onload = function() { //メイン処理
       //シーン読み込み
-      var sceneTitle=titleScene(core);
-      var sceneNaming=namingScene(core);
       var sceneMatching=matchingScene(core);
+      var sceneNaming=namingScene(core,sceneMatching);
+      var sceneTitle=titleScene(core,sceneNaming);
       var sceneGamePlay=gamePlayScene(core);
       var i=new Vector2(0,0);
       //ゲームプレイシーンへ;
         core.replaceScene(sceneTitle);
         core.currentScene.backgroundColor  = '#7ecef4'; //背景色変更
-
-        socket.emit('join', {name:name});
 
         socket.on('gamestart',()=>{
             alert("ゲームを開始します");

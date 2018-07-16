@@ -5,6 +5,8 @@ class ButtonUI{
     this._sprite.image=core.assets[filepath];
     this._x=x;
     this._y=y;
+    this._sprite.x=x;
+    this._sprite.y=y;
     this._sprite.scaleX=scalex;
     this._sprite.scaleY=scaley;
   }
