@@ -16,9 +16,20 @@ var gamePlayScene=function(core){
   var enemy=new Enemy(core,new Vector2(256,256));
   var player=new Player(core,new Vector2(128,128));
   var rulue=new GameRule(timeUi,player,enemy);
-  var heart=new Heart(core,scene,player);
+
+
+
+  var blockManager = new BlockManager(scene);
+  blockManager.AddBlock(new Block(core, new Vector2(0, 0), 5, 320));
+  blockManager.AddBlock(new Block(core, new Vector2(315, 0), 5, 320));
+  blockManager.AddBlock(new Block(core, new Vector2(0, 0), 320, 5));
+  blockManager.AddBlock(new Block(core, new Vector2(0, 315), 320, 5));
+  blockManager.AddBlock(new Block(core, new Vector2(50, 50), 50, 50));
+
   scene.addChild(player.getSprite()); //　プレイヤー追加
   scene.addChild(enemy.getSprite());  //エネミー追加
+  var heart=new Heart(core,scene,player);
+
   //プレイヤーが弾を撃つイベント
   scene.addEventListener('touchstart', function(e) {
     //死んでるときは打てない
@@ -38,6 +49,8 @@ var gamePlayScene=function(core){
           enemy.isDeadFunction();
         };
       }
+
+
     });
 
   //Update
@@ -47,11 +60,12 @@ var gamePlayScene=function(core){
     enemy.upDate();
     bulletManager.upDate();
     timeUi.upDate();
-
-
     rulue.upDate();
-
     heart.upDate();
+
+
+    let offset = new Vector2(player.getSprite().width / 2, player.getSprite().height / 2);
+    player.setPosition(blockManager.Intersect(player.getPosition(), offset, offset.x * player.getSprite().scaleX));
 
     if(rulue.getIsEnd()){
       var sceneResult=resultScene(core,rulue);

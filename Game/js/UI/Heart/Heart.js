@@ -12,7 +12,7 @@ var Heart=function(core,scene,player){
     sprite.image=core.assets['./img/Heart.png'];
     sprite.opacity=1.0;
     sprite.x=150+32*i;
-    sprite.y=0;
+    sprite.y=-50;
     sprite.scale(0.1,0.1);
     this.enemyHp.push(sprite);
     //core.currentScene.addChild(sprite);
@@ -22,8 +22,8 @@ var Heart=function(core,scene,player){
     var sprite=new Sprite(163,149);
     sprite.image=core.assets['./img/Heart.png'];
     sprite.opacity=1.0;
-    sprite.x=32*i;
-    sprite.y=0;
+    sprite.x=32*i-50;
+    sprite.y=-50;
     sprite.scale(0.1,0.1);
     this.playerHp.push(sprite);
   }
