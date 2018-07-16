@@ -11,6 +11,13 @@ var gamePlayScene=function(core){
 
   scene.addChild(timeUi.getLabel());
 
+  var blockManager = new BlockManager(scene);
+  blockManager.AddBlock(new Block(core, new Vector2(0, 0), 5, 320));
+  blockManager.AddBlock(new Block(core, new Vector2(315, 0), 5, 320));
+  blockManager.AddBlock(new Block(core, new Vector2(0, 0), 320, 5));
+  blockManager.AddBlock(new Block(core, new Vector2(0, 315), 320, 5));
+  blockManager.AddBlock(new Block(core, new Vector2(50, 50), 50, 50));
+
   var enemy=new Enemy(core,new Vector2(256,256));
   var player=new Player(core,new Vector2(128,128));
   var rulue=new GameRule(timeUi,player,enemy);
@@ -42,6 +49,10 @@ var gamePlayScene=function(core){
   scene.addEventListener(Event.ENTER_FRAME, function(e)
   {
     player.upDate();
+
+    let offset = new Vector2(player.getSprite().width / 2, player.getSprite().height / 2);
+    player.setPosition(blockManager.Intersect(player.getPosition(), offset, offset.x * player.getSprite().scaleX));
+
     enemy.upDate();
     bulletManager.upDate();
     timeUi.upDate();
