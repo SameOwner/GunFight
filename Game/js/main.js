@@ -51,7 +51,6 @@ window.onload = function() {
 
         });
         socket.on('go',(num)=>{
-          maptype=num;
           let sound = core.assets['./sound/matching_finish.mp3'].clone();
           sound.play();
           bgmManager.play('./sound/bgm_gameplay.mp3');
