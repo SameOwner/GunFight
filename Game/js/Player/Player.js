@@ -9,7 +9,7 @@ var Player=function(core,vector2){
   this.bullets=[];
   this.time=0;
   this.direNum=0;
-  this.Hp=5;
+  this.Hp=3;
 }
 Player.prototype={
   getSprite : function(){

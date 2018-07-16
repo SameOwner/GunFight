@@ -1,20 +1,22 @@
 var gamePlayScene=function(core){
   var scene=new Scene();
-
   //時間UI追加
   var timeUi=new TimeUI(core);
   //弾マネージャー追加
   var bulletManager=new BulletManager(core);
   var frame=0;
 
+  var backGraund=new Sprite(320,320);
+  backGraund.image=core.assets['./img/background.png'];
+  backGraund.x=0;
+  backGraund.y=0;
 
-
+  scene.addChild(backGraund);
   scene.addChild(timeUi.getLabel());
-
   var enemy=new Enemy(core,new Vector2(256,256));
   var player=new Player(core,new Vector2(128,128));
   var rulue=new GameRule(timeUi,player,enemy);
-  var heart=new Heart(core,player);
+  var heart=new Heart(core,scene,player);
   scene.addChild(player.getSprite()); //　プレイヤー追加
   scene.addChild(enemy.getSprite());  //エネミー追加
   //プレイヤーが弾を撃つイベント
