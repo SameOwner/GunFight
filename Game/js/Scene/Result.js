@@ -1,4 +1,4 @@
-var resultScene=function(core,gameRulue){
+var resultScene=function(core,gameRulue,title){
   var scene=new Scene();
 
 
@@ -12,6 +12,12 @@ var resultScene=function(core,gameRulue){
   label.text=String("時間切れ");
 
   scene.addChild(label);
+
+  let returnButton=new ButtonUI(core,'./img/returntitle_button.png',128,32,screen_width*0.5-32,200,1,1);
+  returnButton.setEvent(function(){
+    location.reload();
+  });
+  scene.addChild(returnButton.getSprite());
 
   //タッチイベント
   scene.addEventListener('touchstart', function(e) {

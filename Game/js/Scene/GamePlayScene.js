@@ -1,4 +1,4 @@
-var gamePlayScene=function(core){
+var gamePlayScene=function(core,title,bgmManager){
   var scene=new Scene();
   //時間UI追加
   var timeUi=new TimeUI(core);
@@ -18,9 +18,31 @@ var gamePlayScene=function(core){
   var blockManager = new BlockManager(scene);
   blockManager.AddBlock(new Block(core, new Vector2(0, 0), 5, 320));
   blockManager.AddBlock(new Block(core, new Vector2(315, 0), 5, 320));
-  blockManager.AddBlock(new Block(core, new Vector2(0, 0), 320, 5));
+  blockManager.AddBlock(new Block(core, new Vector2(0, 0), 320, 50));
   blockManager.AddBlock(new Block(core, new Vector2(0, 315), 320, 5));
-  blockManager.AddBlock(new Block(core, new Vector2(50, 50), 50, 50));
+
+  socket.on('go',(num)=>{
+    let playerPos;
+    if(playerNum===1)playerPos=new Vector2(140,0);
+    else playerPos=new Vector2(140,270);
+    player.setPosition(playerPos);
+    maptype=num;
+    let text='';
+    var req = new XMLHttpRequest();
+    req.open("get", `../data/map${maptype}.csv`, true);
+    req.send(null);
+    req.onload = function(){
+      text=req.responseText;
+      text=text.split("\n");
+      for(var i=0;i<text.length;++i){
+        let result=[];
+        result = text[i].split(",");
+        blockManager.AddBlock(new Block(core, new Vector2(parseInt(result[0],10), parseInt(result[1],10)), parseInt(result[2],10),parseInt(result[3],10)));
+      }
+    }
+  });
+
+
 
   scene.addChild(timeUi.getLabel());
 
@@ -122,7 +144,10 @@ var gamePlayScene=function(core){
     player.setPosition(blockManager.Intersect(player.getPosition(), offset, offset.x * player.getSprite().scaleX));
 
     if(rulue.getIsEnd()){
-      var sceneResult=resultScene(core,rulue);
+      socket.emit('game end', {room:room});
+      bgmManager.play('./sound/result.mp3');
+
+      var sceneResult=resultScene(core,rulue,title);
       core.replaceScene(sceneResult);
       return;
     }

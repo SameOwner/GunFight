@@ -5,6 +5,7 @@ const app  = express();
 const http = require('http').Server(app);
 const io   = require('socket.io')(http);
 let room_num = 0;
+let ready_count={};
 
 app.use('/', express.static(__dirname));
 
@@ -15,7 +16,6 @@ app.get('/', (req, res)=>{
 http.listen(port, ()=>{
 	console.log(`${port}ポートで接続待機します`);
 });
-
 
 //--------------------------------------
 // Socket.io
@@ -62,8 +62,22 @@ io.on('connection', (socket)=>{
 	socket.on('page close',(data)=>{
 		io.to(data.room).emit('close room');
 		console.log(`${data.room}ルームの${data.name}が退室しました`);
+	});
+
+	socket.on('game end',(data)=>{
+		socket.leave(data.room.toString());
+		console.log(`${data.room}の対戦が終了しました`);
+	});
+	socket.on('ready',(data)=>{
+		if(ready_count[data.room]){
+			var maptype = Math.floor( Math.random()*3);
+			io.to(data.room).emit('go',maptype);
+			delete ready_count[data.room];
+		}
+		else ready_count[data.room]=1;
 
 	});
+
 	//切断
 	socket.on('disconnect', ()=>{
 		console.log("disconnected");
