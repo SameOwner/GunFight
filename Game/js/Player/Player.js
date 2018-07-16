@@ -1,5 +1,5 @@
 //Player定義
-var Player=function(core,vector2){
+var Player=function(core,scene,vector2){
   this.sprite=new Sprite(40,56);
   this.sprite.image=core.assets['./img/player2.png'];
   this.sprite.scale(0.5,0.5);
@@ -10,6 +10,9 @@ var Player=function(core,vector2){
   this.time=0;
   this.direNum=0;
   this.Hp=3;
+  this.nameLabel=new Label(name);
+  this.nameLabel.scale(0.7,0.7);
+  scene.addChild(this.nameLabel);
 }
 Player.prototype={
   getSprite : function(){
@@ -36,7 +39,7 @@ Player.prototype={
     //速度
     var velo=new Vector2(0,0);
     //移動速度
-    var speed=2;
+    var speed=1;
     //移動処理
     if(this.core.input.w){
       velo.y-=speed;
@@ -85,6 +88,11 @@ Player.prototype={
     if(this.Hp<=0)
     this.sprite.opacity=0.0;
 
+    this.nameLabel.text=name;
+    this.nameLabel.x=this.vector2.x-130;
+    this.nameLabel.y=this.vector2.y;
+    this.nameLabel.textAlign ="center";
+
 
   },
   //攻撃する時に呼ぶ
@@ -95,6 +103,9 @@ Player.prototype={
     var normalizeVec=new Vector2(attackVec2.x,attackVec2.y).normalize();
     var bulletSpawnPos=new Vector2(this.vector2.x+(40*0.2/2),this.vector2.y+(56*0.7/2));
     bulletManager.setNetBullet(bulletSpawnPos,normalizeVec);
+
+
+
     return new Bullet(this.core,bulletSpawnPos,normalizeVec);
   }
 }

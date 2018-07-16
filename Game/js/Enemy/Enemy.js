@@ -1,5 +1,5 @@
 //Player定義
-var Enemy=function(core,vector2){
+var Enemy=function(core,scene,vector2){
   this.sprite=new Sprite(40,56);
   this.sprite.image=core.assets['./img/player2.png'];
   this.frame=0;
@@ -11,7 +11,14 @@ var Enemy=function(core,vector2){
 
   this.isDead=false;
 
+  this.nameLabel=new Label("敵");
+  this.nameLabel.x=this.vector2.x-130;
+  this.nameLabel.y=this.vector2.y;
+  this.nameLabel.textAlign ="center";
   this.sprite.scale(0.7,0.7);
+  scene.addChild(this.nameLabel);
+
+
 }
 Enemy.prototype={
   getSprite : function(){
@@ -73,5 +80,12 @@ Enemy.prototype={
 
     this.sprite.x=this.vector2.x;
     this.sprite.y=this.vector2.y;
+
+
+    this.nameLabel.x=this.vector2.x-130;
+    this.nameLabel.y=this.vector2.y;
+  },
+  setName:function(enemyName){
+    this.nameLabel.text=enemyName;
   }
 }

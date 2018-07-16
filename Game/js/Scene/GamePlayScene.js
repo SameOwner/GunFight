@@ -12,10 +12,6 @@ var gamePlayScene=function(core){
   backGraund.y=0;
 
   scene.addChild(backGraund);
-  scene.addChild(timeUi.getLabel());
-  var enemy=new Enemy(core,new Vector2(256,256));
-  var player=new Player(core,new Vector2(128,128));
-  var rulue=new GameRule(timeUi,player,enemy);
 
 
 
@@ -26,14 +22,34 @@ var gamePlayScene=function(core){
   blockManager.AddBlock(new Block(core, new Vector2(0, 315), 320, 5));
   blockManager.AddBlock(new Block(core, new Vector2(50, 50), 50, 50));
 
+  scene.addChild(timeUi.getLabel());
+
+  var enemy=new Enemy(core,scene,new Vector2(256,256));
+  var player=new Player(core,scene,new Vector2(128,128));
+  var rulue=new GameRule(timeUi,player,enemy);
+
   scene.addChild(player.getSprite()); //　プレイヤー追加
   scene.addChild(enemy.getSprite());  //エネミー追加
   var heart=new Heart(core,scene,player);
 
+  var countDown=new Label("3");
+  countDown.textAlign="center";
+  countDown.x=10;
+  countDown.y=150;
+  countDown.scale(3,3);
+  var countDownNum=3;
+  var countDownFrame=0;
+
+  scene.addChild(countDown);
+
+
+
   //プレイヤーが弾を撃つイベント
   scene.addEventListener('touchstart', function(e) {
     //死んでるときは打てない
-    if(player.getHp()>0){
+    if(player.getHp()>0&&countDownNum<0){
+      let sound = core.assets['./sound/shot.mp3'].clone();
+      sound.play();
       bulletManager.addBullet(player.SpawnBullet(bulletManager,new Vector2(e.x,e.y)));
     }
   });
@@ -45,6 +61,7 @@ var gamePlayScene=function(core){
         enemy.vector2.y=enemyPos.y;
         bulletManager.addEnemyBullet(data.bullets);
         heart.setEnemyHp(data.hp);
+        enemy.setName(data.pName);
         if(data.hp<=0){
           enemy.isDeadFunction();
         };
@@ -56,6 +73,43 @@ var gamePlayScene=function(core){
   //Update
   scene.addEventListener(Event.ENTER_FRAME, function(e)
   {
+    //ネット系
+    frame++;
+    if(frame%1==0){
+      //送る
+      var playerPos=player.getPosition();
+      var arrayPos=[playerPos.x,playerPos.y];
+      var bullets=[0,0,0,0];  //座標x,座標y,動きベクトルx,動きベクトルy  撃ってない場合は全部0
+      bullets=bulletManager.getNetBullet().slice();
+      bulletManager.resetNetBullet();
+      socket.emit('update',{room:room,pos:arrayPos,playerNum:playerNum,bullets:bullets,hp:player.getHp(),pName:name});
+    }
+
+
+
+    countDownFrame++;
+    if(countDownFrame>=60){
+        countDownNum--;
+        countDownFrame=0;
+    }
+
+    if(countDownNum>0){
+      countDown.text=String(countDownNum);
+      return;
+    }
+    else if(countDownNum==0){
+      countDown.text="スタート";
+      if(countDownFrame==0){
+        let sound = core.assets['./sound/game_start.mp3'].clone();
+        sound.play();
+      }
+      return;
+    }
+    else {
+      countDown.opacity=0.0;
+    }
+
+
     player.upDate();
     enemy.upDate();
     bulletManager.upDate();
@@ -83,11 +137,16 @@ var gamePlayScene=function(core){
           bulletManager.getBullets().splice(i,1);
           //ダメージ
           player.Damage();
+
+          let sound = core.assets['./sound/hit.mp3'].clone();
+          sound.play();
       }
       else if(bulletManager.getBullets()[i].getSprite().within(enemy.getSprite(),16)) {
           scene.removeChild(bulletManager.getBullets()[i].getSprite());
           //配列からも
           bulletManager.getBullets().splice(i,1);
+          let sound = core.assets['./sound/hit.mp3'].clone();
+          sound.play();
       } else {
           var bullet = bulletManager.getBullets()[i];
           let offset = new Vector2(bullet.getSprite().width / 2, bullet.getSprite().height / 2);
@@ -96,17 +155,6 @@ var gamePlayScene=function(core){
               bulletManager.getBullets().splice(i, 1);
           }
       }
-    }
-    //ネット系
-    frame++;
-    if(frame%1==0){
-      //送る
-      var playerPos=player.getPosition();
-      var arrayPos=[playerPos.x,playerPos.y];
-      var bullets=[0,0,0,0];  //座標x,座標y,動きベクトルx,動きベクトルy  撃ってない場合は全部0
-      bullets=bulletManager.getNetBullet().slice();
-      bulletManager.resetNetBullet();
-      socket.emit('update',{room:room,pos:arrayPos,playerNum:playerNum,bullets:bullets,hp:player.getHp()});
     }
   });
 

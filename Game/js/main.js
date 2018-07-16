@@ -18,6 +18,12 @@ window.onload = function() {
     core.preload('./img/start_button.png');
     core.preload('./img/Heart.png');
     core.preload('./img/background.png');
+
+    core.preload('./sound/shot.mp3');
+    core.preload('./sound/hit.mp3');
+    core.preload('./sound/game_start.mp3');
+
+
     //キーバインド
     core.keybind(87, "w");
     core.keybind(65, "a");
