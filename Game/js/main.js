@@ -14,6 +14,7 @@ window.onload = function() {
     core.preload('./sound/matching_finish.mp3');
     core.preload('./img/decide_button.png');
     core.preload('./img/gunfight.png');
+    core.preload('./img/Heart.jpg');
 
     //キーバインド
     core.keybind(87, "w");

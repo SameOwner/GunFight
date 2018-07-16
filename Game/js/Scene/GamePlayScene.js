@@ -8,12 +8,13 @@ var gamePlayScene=function(core){
   var frame=0;
 
 
+
   scene.addChild(timeUi.getLabel());
 
   var enemy=new Enemy(core,new Vector2(256,256));
   var player=new Player(core,new Vector2(128,128));
-
   var rulue=new GameRule(timeUi,player,enemy);
+  var heart=new Heart(core,player);
   scene.addChild(player.getSprite()); //　プレイヤー追加
   scene.addChild(enemy.getSprite());  //エネミー追加
   //プレイヤーが弾を撃つイベント
@@ -30,6 +31,7 @@ var gamePlayScene=function(core){
         enemy.vector2.x=enemyPos.x;
         enemy.vector2.y=enemyPos.y;
         bulletManager.addEnemyBullet(data.bullets);
+        heart.setEnemyHp(data.hp);
         if(data.hp<=0){
           enemy.isDeadFunction();
         };
@@ -47,6 +49,7 @@ var gamePlayScene=function(core){
 
     rulue.upDate();
 
+    heart.upDate();
 
     if(rulue.getIsEnd()){
       var sceneResult=resultScene(core,rulue);
