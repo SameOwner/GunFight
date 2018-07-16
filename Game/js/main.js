@@ -10,6 +10,11 @@ window.onload = function() {
     core.preload('./img/player2.png');
     core.preload('./img/bullet.png');
     core.preload('./img/enemyBullet.png');
+    core.preload('./img/matching_wait.png');
+    core.preload('./sound/matching_finish.mp3');
+    core.preload('./img/decide_button.png');
+    core.preload('./img/gunfight.png');
+
     //キーバインド
     core.keybind(87, "w");
     core.keybind(65, "a");
@@ -17,11 +22,28 @@ window.onload = function() {
     core.keybind(68, "d");
     core.onload = function() { //メイン処理
       //シーン読み込み
+      var sceneTitle=titleScene(core);
+      var sceneNaming=namingScene(core);
+      var sceneMatching=matchingScene(core);
       var sceneGamePlay=gamePlayScene(core);
       var i=new Vector2(0,0);
       //ゲームプレイシーンへ;
-        core.replaceScene(sceneGamePlay);
+        core.replaceScene(sceneTitle);
         core.currentScene.backgroundColor  = '#7ecef4'; //背景色変更
+
+        socket.emit('join', {name:name});
+
+        socket.on('gamestart',()=>{
+            alert("ゲームを開始します");
+            let sound = core.assets['./sound/matching_finish.mp3'].clone();
+            sound.play();
+            core.replaceScene(sceneGamePlay);
+
+        });
     }
     core.start();
+
+
+
+
 };

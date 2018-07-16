@@ -13,6 +13,11 @@
     <script type="text/javascript" src="./js/Bullet/Bullet.js"></script>
     <script type="text/javascript" src="./js/Player/Player.js"></script>
     <script type="text/javascript" src="./js/Scene/GamePlayScene.js"></script>
+    <script type="text/javascript" src="./js/UI/MatchingWait.js"></script>
+    <script type="text/javascript" src="./js/UI/Button/ButtonUI.js"></script>
+    <script type="text/javascript" src="./js/Scene/TitleScene.js"></script>
+    <script type="text/javascript" src="./js/Scene/MatchingScene.js"></script>
+    <script type="text/javascript" src="./js/Scene/NamingScene.js"></script>
     <script type="text/javascript" src="./js/main.js"></script>
 
   </head>
@@ -21,8 +26,8 @@
       let socket = io();
       let room;
       let playerNum;
-      let name="a";
-      socket.emit('join', {name:name});
+      let name="noname";
+
   </script>
     <script type="text/javascript" src="./js/Event/RoomEvent.js"></script>
     <script type="text/javascript" src="./js/Event/PageCloseEvent.js"></script>
