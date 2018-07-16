@@ -9,6 +9,7 @@ window.onload = function() {
     //リソース読み込み
     core.preload('./img/player2.png');
     core.preload('./img/bullet.png');
+    core.preload('./img/block.png');
     //キーバインド
     core.keybind(87, "w");
     core.keybind(65, "a");

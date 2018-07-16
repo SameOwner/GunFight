@@ -7,6 +7,9 @@ var gamePlayScene=function(core){
   var bulletManager=new BulletManager(core);
   scene.addChild(timeUi.getLabel());
 
+  var block = new Block(core, new Vector2(0, 0), 50, 50);
+  scene.addChild(block.getSprite());
+
   //プレイヤー追加
   var player=new Player(core,new Vector2(128,128));
   scene.addChild(player.getSprite()); // 現在のシーンに熊を追加
@@ -21,6 +24,7 @@ var gamePlayScene=function(core){
   scene.addEventListener(Event.ENTER_FRAME, function(e)
   {
     player.upDate();
+    player.setPosition(block.IntersectCircle(player.getPosition(),25));
     bulletManager.upDate();
     timeUi.upDate();
     //あたり判定テスト
