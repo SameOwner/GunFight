@@ -18,6 +18,7 @@ window.onload = function() {
     core.preload('./img/start_button.png');
     core.preload('./img/Heart.png');
     core.preload('./img/background.png');
+    core.preload('./img/enemy.png');
 
     core.preload('./sound/shot.mp3');
     core.preload('./sound/hit.mp3');

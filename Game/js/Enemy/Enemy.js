@@ -1,7 +1,7 @@
 //Player定義
 var Enemy=function(core,scene,vector2){
   this.sprite=new Sprite(40,56);
-  this.sprite.image=core.assets['./img/player2.png'];
+  this.sprite.image=core.assets['./img/enemy.png'];
   this.frame=0;
   this.vector2=vector2;
   this.core=core;
@@ -15,7 +15,7 @@ var Enemy=function(core,scene,vector2){
   this.nameLabel.x=this.vector2.x-130;
   this.nameLabel.y=this.vector2.y;
   this.nameLabel.textAlign ="center";
-  this.sprite.scale(0.7,0.7);
+  this.sprite.scale(0.5,0.5);
   scene.addChild(this.nameLabel);
 
 

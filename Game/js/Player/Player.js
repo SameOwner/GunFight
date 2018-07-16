@@ -39,7 +39,7 @@ Player.prototype={
     //速度
     var velo=new Vector2(0,0);
     //移動速度
-    var speed=1;
+    var speed=3;
     //移動処理
     if(this.core.input.w){
       velo.y-=speed;

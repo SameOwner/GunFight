@@ -23,8 +23,8 @@ Bullet.prototype={
     return this.sprite;
   },
   upDate :function(){
-    this.vector2.x+=this.attackVec2.x*2;
-    this.vector2.y+=this.attackVec2.y*2;
+    this.vector2.x+=this.attackVec2.x*4;
+    this.vector2.y+=this.attackVec2.y*4;
     var angle=this.attackVec2.Angle();
     this.sprite.rotation=angle;
 
