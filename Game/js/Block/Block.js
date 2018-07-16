@@ -44,4 +44,26 @@ Block.prototype = {
         result.minus(offset);
         return result;
     },
+    IsCollisionCircle: function (pos, offset, radius) {
+        var result = new Vector2(pos.x, pos.y);
+        result.plus(offset);
+        var Left = this.pos.x - radius;
+        var Right = this.pos.x + this.w + radius;
+        var Up = this.pos.y - radius;
+        var Down = this.pos.y + this.h + radius;
+        if (Left + radius < result.x && result.x < Right - radius && Up < result.y && result.y < Down) {
+            return true;
+        } else if (Up + radius < result.y && result.y < Down - radius && Left < result.x && result.x < Right) {
+            return true;
+        } else {
+            var p = this.getPosition();
+            p.x += (this.pos.x < result.x) ? this.w : 0;
+            p.y += (this.pos.y < result.y) ? this.h : 0;
+            result.minus(p);
+            if (result.length() < radius) {
+                return true;
+            }
+        }
+        return false;
+    },
 }

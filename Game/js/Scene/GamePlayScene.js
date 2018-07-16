@@ -83,6 +83,13 @@ var gamePlayScene=function(core){
           scene.removeChild(bulletManager.getBullets()[i].getSprite());
           //配列からも
           bulletManager.getBullets().splice(i,1);
+      } else {
+          var bullet = bulletManager.getBullets()[i];
+          let offset = new Vector2(bullet.getSprite().width / 2, bullet.getSprite().height / 2);
+          if (blockManager.IsCollision(bullet.getPosition(), offset, offset.x * bullet.getSprite().scaleX)) {
+              scene.removeChild(bullet.getSprite());
+              bulletManager.getBullets().splice(i, 1);
+          }
       }
     }
     //ネット系
