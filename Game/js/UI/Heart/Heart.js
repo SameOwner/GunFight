@@ -1,4 +1,4 @@
-//Player定義
+﻿//Player螳夂ｾｩ
 var Heart=function(core,scene,player){
   this.player=player;
 
@@ -34,6 +34,10 @@ var Heart=function(core,scene,player){
 }
 Heart.prototype={
   upDate:function(){
+    for(var i=0;i<3;i++){
+      this.playerHp[i].opacity=0.0;
+    }
+
     for(var i=0;i<this.player.getHp();i++){
       this.playerHp[i].opacity=1.0;
     }

@@ -1,4 +1,4 @@
-var gamePlayScene=function(core,title,bgmManager){
+﻿var gamePlayScene=function(core,title,bgmManager){
   var scene=new Scene();
   //時間UI追加
   var timeUi=new TimeUI(core);
@@ -97,7 +97,7 @@ var gamePlayScene=function(core,title,bgmManager){
   {
     //ネット系
     frame++;
-    if(frame%1==0){
+    if(frame%2==0){
       //送る
       var playerPos=player.getPosition();
       var arrayPos=[playerPos.x,playerPos.y];
